@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "express": "^4.17.2",
+    "spotify-web-api-node": "^5.0.2"
+  }
+}
