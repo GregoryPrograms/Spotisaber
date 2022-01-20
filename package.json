@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "express": "^4.17.2",
+    "prompt": "^1.2.1",
+    "prompt-sync": "^4.1.6",
     "spotify-web-api-node": "^5.0.2"
   }
 }
