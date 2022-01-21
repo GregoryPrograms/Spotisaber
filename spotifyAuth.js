@@ -1,6 +1,7 @@
 var SpotifyWebApi = require('spotify-web-api-node');
-const express = require('express')
-const playlists = require('./spotifyPlaylistPuller')
+const express = require('express');
+const playlists = require('./spotifyPlaylistPuller');
+const beatSaver = require('./beatsaverQuery');
 
 // This file is copied from: https://github.com/thelinmichael/spotify-web-api-node/blob/master/examples/tutorial/00-get-access-token.js
 
@@ -52,7 +53,20 @@ var spotifyApi = new SpotifyWebApi({
           `Sucessfully retreived access token. Expires in ${expires_in} s.`
         );
         res.send('Success! You can now close the window.');
-        playlists.playlistPuller(access_token);
+        async function getTracks(){
+          let tracks = await playlists.playlistPuller(access_token);
+          console.log(tracks);
+          for(let track of tracks){
+            console.log("Searching for: " + track + "\n")
+            let trackQuery = await beatSaver.beatSaverQuery(track)
+            console.log("List of Results: ")
+            for(let result of trackQuery){
+              console.log(result.name)
+            }
+            console.log("--------------------------------------------------------")
+          }
+        };
+        getTracks();
         setInterval(async () => {
           const data = await spotifyApi.refreshAccessToken();
           const access_token = data.body['access_token'];

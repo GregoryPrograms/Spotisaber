@@ -1,4 +1,5 @@
-function playlistPuller(access_token){
+//Takes as input a spotify access token, returns an array of strings created from songs with artist name and song name in the strings.
+async function playlistPuller(access_token){
     const prompt = require('prompt-sync')({ sigint: true});
     const fs = require('fs');
     const SpotifyWebApi = require('spotify-web-api-node');
@@ -7,13 +8,10 @@ function playlistPuller(access_token){
     const spotifyApi = new SpotifyWebApi();
     spotifyApi.setAccessToken(ACCESS_TOKEN);
 
-    function getUserInfo() {
-        (async () => {
-            const me = await spotifyApi.getMe();
-            getUserPlaylists(me.body.id);
-        })().catch(e => {
-            console.error(e);
-        });
+    async function getUserInfo() {
+        const me = await spotifyApi.getMe();
+        let tracks = await getUserPlaylists(me.body.id);
+        return tracks;
     }
 
     async function getUserPlaylists(spotifyID){
@@ -27,7 +25,7 @@ function playlistPuller(access_token){
         var playlistSelect = data.body.items[parseInt(prompt("Pick one of the above playlists by the given ID number:"))]; 
         console.log("Selected playlist is: ", playlistSelect.name);
         let tracks = await getPlayListTracks(playlistSelect.id, playlistSelect.name);
-        console.log(tracks);
+        return tracks;
     }
 
     async function getPlayListTracks(playlistId, playlistName){
@@ -47,8 +45,7 @@ function playlistPuller(access_token){
         }
     return tracks;
     }
-
-    getUserInfo();
+    return (await getUserInfo());
 }
 
 exports.playlistPuller = playlistPuller;
