@@ -1,5 +1,5 @@
 var SpotifyWebApi = require('spotify-web-api-node');
-const config = require('./config');
+require('dotenv').config();
 const express = require('express');
 const playlists = require('./spotifyPlaylistPuller');
 const beatSaver = require('./beatsaverQuery');
@@ -15,9 +15,9 @@ const scopes = [
   
 // credentials are optional
 var spotifyApi = new SpotifyWebApi({
-    clientId: config.clientId,
-    clientSecret: config.clientSecret,
-    redirectUri: config.redirectUri
+    clientId: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    redirectUri: 'http://localhost:8888/callback/'
   });
   
   const app = express();
