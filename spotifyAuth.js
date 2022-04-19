@@ -1,4 +1,5 @@
 var SpotifyWebApi = require('spotify-web-api-node');
+const config = require('./config');
 const express = require('express');
 const playlists = require('./spotifyPlaylistPuller');
 const beatSaver = require('./beatsaverQuery');
@@ -14,9 +15,9 @@ const scopes = [
   
 // credentials are optional
 var spotifyApi = new SpotifyWebApi({
-    clientId: '0e68c4c86fbe47538875e17cc7405c7a',
-    clientSecret: '386f316c4c0140e88b8c8b54d0fedcb1',
-    redirectUri: 'http://localhost:8888/callback/'
+    clientId: config.clientId,
+    clientSecret: config.clientSecret,
+    redirectUri: config.redirectUri
   });
   
   const app = express();
@@ -61,7 +62,7 @@ var spotifyApi = new SpotifyWebApi({
             let trackQuery = await beatSaver.beatSaverQuery(track)
             console.log("List of Results: ")
             for(let result of trackQuery){
-              console.log(result.name)
+              console.log(result.name, " - ", result)
             }
             console.log("--------------------------------------------------------")
           }
